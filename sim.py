@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import math
+import random
 
 def create_gaussian_phosphene(phosphene_radius, sigma=None):
     diameter = 2 * phosphene_radius + 1
@@ -12,7 +13,6 @@ def create_gaussian_phosphene(phosphene_radius, sigma=None):
     gaussian_phosphene = np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2))
     gaussian_phosphene[y ** 2 + x ** 2 > phosphene_radius ** 2] = 0
     return gaussian_phosphene
-
 
 def hexagonal_grid_iterator(img_shape, radius):
     height, width = img_shape
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     simulated_img = simulate_phosphene_vision(image_path, 
                                               h_res=30, w_res=40, 
                                               enhace_contrast=False,
-                                              upsample_ratio=None,
+                                              upsample_ratio=3,
                                               downsample_ratio=None)
 
     # Save the simulated image
