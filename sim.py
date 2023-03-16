@@ -27,7 +27,8 @@ def hexagonal_grid_iterator(img_shape, radius):
             yield x, y
         x_start = int(x_start + horizontal_spacing / 2) % int(horizontal_spacing)
 
-def simulate_phosphene_vision(image_path, phosphene_radius, h_res, w_res, enhace_contrast, upsample_ratio=None, downsample_ratio=None):
+def simulate_phosphene_vision(image_path, h_res, w_res, enhace_contrast=False, 
+                              upsample_ratio=None, downsample_ratio=None):
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
     # enhance the text contrast in the image
@@ -45,7 +46,7 @@ def simulate_phosphene_vision(image_path, phosphene_radius, h_res, w_res, enhace
 
     # Calculate the phosphene radius adaptively
     height, width = img.shape
-    phosphene_radius = max(height // h_res, width // w_res)
+    phosphene_radius = max(height // h_res, width // w_res) // 2
     print("height, width: ", height, width)
     print("phosphene_radius: ", phosphene_radius)
 
@@ -93,14 +94,17 @@ def simulate_phosphene_vision(image_path, phosphene_radius, h_res, w_res, enhace
     return simulated_img
 
 if __name__ == "__main__":
-    image_path = "input_image_crop2.jpg"
-    phosphene_radius = 5
-    simulated_img = simulate_phosphene_vision(image_path, phosphene_radius, 
-                                              h_res=40, w_res=30, 
+    image_path = "./data/input_image_crop.jpg"
+    simulated_img = simulate_phosphene_vision(image_path, 
+                                              h_res=30, w_res=40, 
                                               enhace_contrast=False,
-                                              upsample_ratio=10,
+                                              upsample_ratio=None,
                                               downsample_ratio=None)
 
+    # Save the simulated image
+    cv2.imwrite("simulated_image.jpg", simulated_img)
+
+    # Display the original and simulated images
     cv2.imshow("Original", cv2.imread(image_path, cv2.IMREAD_GRAYSCALE))
     cv2.imshow("Simulated", simulated_img)
     cv2.waitKey(0)
